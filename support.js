@@ -1,7 +1,5 @@
 define(function(require, exports, module) {
-    main.consumes = [
-        "Plugin", "ui", "menus", "util", "c9"
-    ];
+    main.consumes = ["Plugin", "ui", "menus", "util", "c9"];
     main.provides = ["myplugin"];
     return main;
 
