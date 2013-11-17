@@ -1,6 +1,6 @@
 <a:application xmlns:a="http://ajax.org/2005/aml">
     <a:window
-      id        = "window"
+      id        = "win"
       title     = "Report a bug"
       center    = "true"
       modal     = "false"
