@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
-    main.consumes = ["Plugin", "ui", "menus", "util", "c9", "auth"];
+    main.consumes = [
+        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert"
+    ];
     main.provides = ["myplugin"];
     return main;
 
@@ -8,8 +10,8 @@ define(function(require, exports, module) {
         var ui     = imports.ui;
         var c9     = imports.c9;
         var menus  = imports.menus;
-        var util   = imports.util;
         var auth   = imports.auth;
+        var alert  = imports["dialog.alert"].show;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
         
@@ -78,7 +80,7 @@ define(function(require, exports, module) {
             var fileHandler = attachment.$ext.getElementsByTagName('input')[0].files[0];
             if (fileHandler) { // there is an attachment
                 if (fileHandler.size > attachmentSizeLimit) {
-                    util.alert("Upload failed", "Attachment size exceeds limit", 
+                    alert("Upload failed", "Attachment size exceeds limit", 
                         "Please limit the size of the attachment to less than 2 MB.");
                     // Reenable Send button and clear file chooser
                     btnSend.setAttribute("disabled", false);
@@ -116,7 +118,7 @@ define(function(require, exports, module) {
                             sendTicketToServer(attachedFile);
                         }
                         else {
-                            util.alert("Upload failed", "Uploading the file failed",
+                            alert("Upload failed", "Uploading the file failed",
                                 "The server responded with status " + res.status 
                                 + ". Please try again.");
                         }
@@ -151,7 +153,7 @@ define(function(require, exports, module) {
                     contentType : "application/x-www-form-urlencoded"
                 }, function callback(err, data, res) {
                     if (err || res.status != 200) {
-                        return util.alert("Error filing Zendesk ticket",
+                        return alert("Error filing Zendesk ticket",
                             "Please email us at support@c9.io",
                             typeof data === "string" 
                                 ? data : JSON.stringify(data));
