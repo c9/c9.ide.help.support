@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-    main.consumes = ["Plugin", "ui", "menus", "util", "c9"];
+    main.consumes = ["Plugin", "ui", "menus", "util", "c9", "auth"];
     main.provides = ["myplugin"];
     return main;
 
@@ -9,6 +9,7 @@ define(function(require, exports, module) {
         var c9     = imports.c9;
         var menus  = imports.menus;
         var util   = imports.util;
+        var auth   = imports.auth;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
         
@@ -19,6 +20,10 @@ define(function(require, exports, module) {
         
         var form, confirmation, btnSend, btnClose, subject, description, win;
         var attachment, confirmationMessage;
+        
+        var baseurl = options.baseurl;
+        var FILEREADER_URL = "/api/provision/filereader-fallback/images";
+        var FILETICKET_URL = "/api/context/fileticket";
         
         var loaded = false;
         function load() {
@@ -93,30 +98,29 @@ define(function(require, exports, module) {
                     reader.readAsBinaryString(fileHandler);
                 }
                 else { // Safari hack
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "/api/provision/filereader-fallback/images", true);
-                    xhr.setRequestHeader("Content-Type", "application/octet-stream");
-                    xhr.setRequestHeader("UP-FILENAME", fileHandler.name);
-                    xhr.setRequestHeader("UP-SIZE", fileHandler.size);
-                    xhr.setRequestHeader("UP-TYPE", fileHandler.type);
-    
-                    xhr.onreadystatechange = function () {
-                        if (this.readyState !== 4) return;
-    
-                        if (xhr.status === 200) {
+                    auth.request(baseurl + FILEREADER_URL, {
+                        method  : "POST",
+                        body    : fileHandler,
+                        headers : {
+                            "Content-Type" : "application/octet-stream",
+                            "UP-FILENAME"  : fileHandler.name,
+                            "UP-SIZE"      : fileHandler.size,
+                            "UP-TYPE"      : fileHandler.type
+                        }
+                    }, function(err, data, res){
+                        if (res.status === 200) {
                             var attachedFile = {
-                                binary : xhr.responseText,
-                                name : fileHandler.name
+                                binary : res.body,
+                                name   : fileHandler.name
                             };
                             sendTicketToServer(attachedFile);
                         }
                         else {
                             util.alert("Upload failed", "Uploading the file failed",
-                                "The server responded with status " + xhr.status 
+                                "The server responded with status " + res.status 
                                 + ". Please try again.");
                         }
-                    };
-                    xhr.send(fileHandler);
+                    });
                 }
             }
             else {  // no attachment
@@ -143,29 +147,34 @@ define(function(require, exports, module) {
                 });
                 var postString = keyValueArray.join("&");
     
-                apf.ajax(apf.config.baseurl + "/api/context/fileticket", {
-                    method      : "post",
-                    data        : postString,
-                    contentType : "application/x-www-form-urlencoded",
-                    callback    : function (data, state, extra) {
-                        if (state != apf.SUCCESS) {
-                            return util.alert("Error filing Zendesk ticket",
-                                "Please email us at support@c9.io",
-                                typeof data === "string" 
-                                    ? data : JSON.stringify(data));
-                        }
-                        data = JSON.parse(data);
-                        // Show confirmation message
-                        confirmationMessage.setAttribute("caption",
-                            "<center>Thanks for your report.<br><br>"
-                            + "Our support team will get in touch<br>"
-                            + "with you as soon as possible at<br><b>" 
-                            + apf.escapeXML(data["email"]) + "</b></center>");
-                        form.setProperty("visible", false);
-                        confirmation.setProperty("visible", true);
-                        btnSend.hide();
-                        btnClose.setCaption("Close");
+                auth.request(baseurl + FILETICKET_URL, {
+                    method      : "POST",
+                    body        : postString,
+                    contentType : "application/x-www-form-urlencoded"
+                }, function callback(err, data, res) {
+                    if (err || res.status != 200) {
+                        return util.alert("Error filing Zendesk ticket",
+                            "Please email us at support@c9.io",
+                            typeof data === "string" 
+                                ? data : JSON.stringify(data));
                     }
+                    
+                    try {
+                        data = JSON.parse(data);
+                    }
+                    catch(e){ return callback(e) }
+                    
+                    // Show confirmation message
+                    confirmationMessage.setAttribute("caption",
+                        "<center>Thanks for your report.<br><br>"
+                        + "Our support team will get in touch<br>"
+                        + "with you as soon as possible at<br><b>" 
+                        + apf.escapeXML(data["email"]) + "</b></center>");
+                        
+                    form.setProperty("visible", false);
+                    confirmation.setProperty("visible", true);
+                    btnSend.hide();
+                    btnClose.setCaption("Close");
                 });
             }
         }
