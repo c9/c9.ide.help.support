@@ -128,11 +128,9 @@ define(function(require, exports, module) {
             }
     
             function sendTicketToServer(attachedFile) {
-                var subject = subject.getValue();
-                var description = description.getValue();
                 var postData = {
-                    "subject"     : subject,
-                    "description" : description,
+                    "subject"     : subject.getValue(),
+                    "description" : description.getValue(),
                     "projectName" : c9.projectName,
                     "userAgent"   : navigator.userAgent
                 };
