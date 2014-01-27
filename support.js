@@ -72,7 +72,7 @@ define(function(require, exports, module) {
          * fileTicket
          *
          * This function is called when pressing the Send button. It sends the contents
-         * of the form to the Zendesk Cloud9 IDE account, creating a support ticket
+         * of the form to the Zendesk Cloud9 account, creating a support ticket
          * there.
          */
         function fileTicket() {
@@ -219,7 +219,7 @@ define(function(require, exports, module) {
         /***** Register and define API *****/
         
         /**
-         * "File a ticket" module for Cloud9 IDE
+         * "File a ticket" module for Cloud9
          *
          * Inserts a menu item under the "Help" menu, which, upon being
          * clicked displays a window where a user can file support ticket.
