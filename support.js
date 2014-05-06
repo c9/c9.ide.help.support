@@ -7,18 +7,18 @@ define(function(require, exports, module) {
 
     function main(options, imports, register) {
         var Plugin = imports.Plugin;
-        var ui     = imports.ui;
-        var c9     = imports.c9;
-        var menus  = imports.menus;
-        var auth   = imports.auth;
-        var alert  = imports["dialog.alert"].show;
+        var ui = imports.ui;
+        var c9 = imports.c9;
+        var menus = imports.menus;
+        var auth = imports.auth;
+        var alert = imports["dialog.alert"].show;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
         
         /***** Initialization *****/
         
         var plugin = new Plugin("Ajax.org", main.consumes);
-        var emit   = plugin.getEmitter();
+        var emit = plugin.getEmitter();
         
         var form, confirmation, btnSend, btnClose, subject, description, win;
         var attachment, confirmationMessage;
@@ -49,15 +49,15 @@ define(function(require, exports, module) {
             var markup = require("text!./support.xml");
             ui.insertMarkup(null, markup, plugin);
             
-            win          = plugin.getElement("win");
-            form         = plugin.getElement("form");
+            win = plugin.getElement("win");
+            form = plugin.getElement("form");
             confirmation = plugin.getElement("confirmation");
-            btnSend      = plugin.getElement("btnSend");
-            btnSend      = plugin.getElement("btnSend");
-            btnClose     = plugin.getElement("btnClose");
-            subject      = plugin.getElement("subject");
-            description  = plugin.getElement("description");
-            attachment   = plugin.getElement("attachment");
+            btnSend = plugin.getElement("btnSend");
+            btnSend = plugin.getElement("btnSend");
+            btnClose = plugin.getElement("btnClose");
+            subject = plugin.getElement("subject");
+            description = plugin.getElement("description");
+            attachment = plugin.getElement("attachment");
             confirmationMessage = plugin.getElement("confirmationMessage");
             
             btnClose.on("click", function(){ closeWindow(); });
@@ -92,8 +92,8 @@ define(function(require, exports, module) {
                     var reader = new FileReader();
                     reader.onload = (function (file) {
                         var attachedFile = {
-                            binary : file.currentTarget.result,
-                            name : fileHandler.name
+                            binary: file.currentTarget.result,
+                            name: fileHandler.name
                         };
                         sendTicketToServer(attachedFile);
                     });
@@ -101,19 +101,19 @@ define(function(require, exports, module) {
                 }
                 else { // Safari hack
                     auth.request(baseurl + FILEREADER_URL, {
-                        method  : "POST",
-                        body    : fileHandler,
-                        headers : {
+                        method: "POST",
+                        body: fileHandler,
+                        headers: {
                             "Content-Type" : "application/octet-stream",
                             "UP-FILENAME"  : fileHandler.name,
                             "UP-SIZE"      : fileHandler.size,
                             "UP-TYPE"      : fileHandler.type
                         }
-                    }, function(err, data, res){
+                    }, function(err, data, res) {
                         if (res.status === 200) {
                             var attachedFile = {
-                                binary : res.body,
-                                name   : fileHandler.name
+                                binary: res.body,
+                                name: fileHandler.name
                             };
                             sendTicketToServer(attachedFile);
                         }
@@ -148,9 +148,9 @@ define(function(require, exports, module) {
                 var postString = keyValueArray.join("&");
     
                 auth.request(baseurl + FILETICKET_URL, {
-                    method      : "POST",
-                    body        : postString,
-                    contentType : "application/x-www-form-urlencoded"
+                    method: "POST",
+                    body: postString,
+                    contentType: "application/x-www-form-urlencoded"
                 }, function callback(err, data, res) {
                     if (err || res.status != 200) {
                         return alert("Error filing Zendesk ticket",
@@ -162,7 +162,7 @@ define(function(require, exports, module) {
                     try {
                         data = JSON.parse(data);
                     }
-                    catch(e){ return callback(e) }
+                    catch (e){ return callback(e) }
                     
                     // Show confirmation message
                     confirmationMessage.setAttribute("caption",
@@ -213,7 +213,7 @@ define(function(require, exports, module) {
         });
         plugin.on("unload", function() {
             loaded = false;
-            drawn  = false;
+            drawn = false;
         });
         
         /***** Register and define API *****/
@@ -225,7 +225,7 @@ define(function(require, exports, module) {
          * clicked displays a window where a user can file support ticket.
          */
         plugin.freezePublicAPI({
-            _events : [
+            _events: [
                 /**
                  * @event draw
                  */
