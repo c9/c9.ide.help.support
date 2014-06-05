@@ -1,8 +1,8 @@
 define(function(require, exports, module) {
     main.consumes = [
-        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert"
+        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help"
     ];
-    main.provides = ["myplugin"];
+    main.provides = ["help.support"];
     return main;
 
     function main(options, imports, register) {
@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             if (loaded) return false;
             loaded = true;
             
-            menus.addItemByPath("Help/Support/Report a bug...", new apf.item({
+            menus.addItemByPath("Help/Support/Report a bug...", new ui.item({
                 onclick: function() {
                     draw();
                     win.show();
@@ -234,7 +234,7 @@ define(function(require, exports, module) {
         });
         
         register(null, {
-            myplugin: plugin
+            "help.support": plugin
         });
     }
 });
