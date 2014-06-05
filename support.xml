@@ -9,6 +9,7 @@
       kbclose   = "true"
       class     = "relative"
       width     = "358"
+      zindex    = "9000"
       >
         <div id="form" style="height: 280px">
             <a:hbox edge="15 14 9" padding="5" align="center">
