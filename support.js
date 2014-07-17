@@ -238,11 +238,6 @@ define(function(require, exports, module) {
                                 ? data : JSON.stringify(data));
                     }
                     
-                    // try {
-                    //     data = JSON.parse(data);
-                    // }
-                    // catch (e){ return callback(e) }
-
                     // Show confirmation message
                     confirmationMessage.setAttribute("caption",
                         "<center>Thanks for your report.<br><br>"
