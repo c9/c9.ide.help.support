@@ -31,7 +31,7 @@
         </div>
         
         <div id="confirmation" style="height: 280px" visible="false">
-            <a:hbox height="280" pack="center" align="center"><a:label id="confirmationMessage" width="200"></a:label></a:hbox>
+            <a:hbox height="280" pack="center" align="center"><a:label id="confirmationMessage" width="280" style="color: #000; font-size: 11pt"></a:label></a:hbox>
         </div>
       
         <a:vbox>

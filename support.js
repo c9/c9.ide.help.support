@@ -40,16 +40,17 @@ define(function(require, exports, module) {
             loaded = true;
 
             menus.once("ready", function(){
-                menus.addItemByPath("Help/Support/Cloud9 Documentation", new ui.item({ 
+                menus.addItemByPath("Help/Support/Documentation", new ui.item({ 
                     onclick: function(){ 
                         window.open('https://docs.c9.io/'); 
                     }
                 }), c += 100, plugin);
-                menus.addItemByPath("Help/Support/Cloud9 Support pages", new ui.item({ 
+                menus.addItemByPath("Help/Support/Support pages", new ui.item({ 
                     onclick: function(){ 
                         window.open('https://support.c9.io/'); 
                     }
                 }), c += 100, plugin);
+                menus.addItemByPath("Help/Support/~", new ui.divider(), c += 100, plugin);
                 menus.addItemByPath("Help/Support/Send Support request", new ui.item({
                     onclick: function() {
                         draw();
@@ -67,7 +68,7 @@ define(function(require, exports, module) {
          * Initializes the menu with Screenshot support (via UserSnap)
          */
         function initMenuWithScreenshotSupport(){
-            menus.addItemByPath("Help/Support/Send Support request with Screenshot", new ui.item({ 
+            menus.addItemByPath("Help/Support/Send Support request with a screenshot", new ui.item({ 
                 onclick: function() {
                     draw();
                     setTimeout(function wait(){
@@ -237,11 +238,11 @@ define(function(require, exports, module) {
                                 ? data : JSON.stringify(data));
                     }
                     
-                    try {
-                        data = JSON.parse(data);
-                    }
-                    catch (e){ return callback(e) }
-                    
+                    // try {
+                    //     data = JSON.parse(data);
+                    // }
+                    // catch (e){ return callback(e) }
+
                     // Show confirmation message
                     confirmationMessage.setAttribute("caption",
                         "<center>Thanks for your report.<br><br>"
