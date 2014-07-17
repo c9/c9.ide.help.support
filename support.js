@@ -1,6 +1,8 @@
+/*global UserSnap _usersnapconfig*/
+
 define(function(require, exports, module) {
     main.consumes = [
-        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help"
+        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info"
     ];
     main.provides = ["help.support"];
     return main;
@@ -11,10 +13,11 @@ define(function(require, exports, module) {
         var c9 = imports.c9;
         var menus = imports.menus;
         var auth = imports.auth;
+        var info = imports.info;
         var alert = imports["dialog.alert"].show;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
-        
+
         /***** Initialization *****/
         
         var plugin = new Plugin("Ajax.org", main.consumes);
@@ -26,25 +29,100 @@ define(function(require, exports, module) {
         var baseurl = options.baseurl;
         var FILEREADER_URL = "/api/provision/filereader-fallback/images";
         var FILETICKET_URL = "/api/context/fileticket";
+
+        var usApiKey = options.userSnapApiKey; 
+        var screenshotSupport = options.screenshotSupport; 
         
         var loaded = false;
+        var c = 0;
         function load() {
             if (loaded) return false;
             loaded = true;
+
+            menus.once("ready", function(){
+                menus.addItemByPath("Help/Support/Cloud9 Documentation", new ui.item({ 
+                    onclick: function(){ 
+                        window.open('https://docs.c9.io/'); 
+                    }
+                }), c += 100, plugin);
+                menus.addItemByPath("Help/Support/Cloud9 Support pages", new ui.item({ 
+                    onclick: function(){ 
+                        window.open('https://support.c9.io/'); 
+                    }
+                }), c += 100, plugin);
+                menus.addItemByPath("Help/Support/Send Support request", new ui.item({
+                    onclick: function() {
+                        draw();
+                        win.show();
+                    }
+                }), c += 100, plugin);
+
+                if (screenshotSupport)
+                    initMenuWithScreenshotSupport();
+            });
             
-            menus.addItemByPath("Help/Support/Report a bug...", new ui.item({
+        }
+
+        /**
+         * Initializes the menu with Screenshot support (via UserSnap)
+         */
+        function initMenuWithScreenshotSupport(){
+            menus.addItemByPath("Help/Support/Send Support request with Screenshot", new ui.item({ 
                 onclick: function() {
                     draw();
-                    win.show();
-                }
-            }), 500, plugin);
+                    setTimeout(function wait(){
+                        if (typeof UserSnap !== "undefined") {
+                            var email = info.getUser().email;
+                            UserSnap.setEmailBox(email); 
+                            UserSnap.openReportWindow();
+                        }
+                        else {
+                            setTimeout(wait, 50);
+                        }
+                    }, 10);
+                },
+                class: "betafeedback"
+            }), c += 100, plugin);
         }
-        
+
         var drawn = false;
         function draw() {
             if (drawn) return;
             drawn = true;
             
+            _usersnapconfig = {
+                apiKey: usApiKey,
+                valign: "middle",
+                halign: "right",
+                tools: ["pen", "arrow", "note"],
+                lang: "en",
+                commentBox: true,
+                commentBoxPlaceholder: "Enter any feedback here. What steps did"
+                    + " you take? Is it reproducible in incognito mode?",
+                emailBox: true,
+                emailBoxPlaceholder: "Your email address",
+                emailRequired: true,
+                btnText: "Beta Feedback",
+                beforeSend: function(obj) {
+                    obj.addInfo = {
+                        userAgent: navigator.userAgent
+                    };
+                },
+                errorHandler: function(errorMessage, errorCode) { 
+                    console.error("UserSnap Error Code: " + errorCode);
+                    console.error("UserSnap Error Message: " + errorMessage); 
+                },
+                mode: "report"
+            }; 
+            (function() {
+                var s = document.createElement("script");
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "//api.usersnap.com/usersnap.js";
+                var x = document.getElementsByTagName("head")[0];
+                x.appendChild(s);
+            })();
+
             // Create UI elements
             var markup = require("text!./support.xml");
             ui.insertMarkup(null, markup, plugin);
