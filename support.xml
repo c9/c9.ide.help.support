@@ -7,7 +7,7 @@
       buttons   = "close"
       skin      = "bk-window"
       kbclose   = "true"
-      class     = "relative"
+      class     = "relative reportabug"
       width     = "358"
       zindex    = "9000"
       >
