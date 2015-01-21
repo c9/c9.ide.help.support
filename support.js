@@ -119,9 +119,10 @@ define(function(require, exports, module) {
                 var s = document.createElement("script");
                 s.type = "text/javascript";
                 s.async = true;
-                s.src = "//api.usersnap.com/usersnap.js";
-                var x = document.getElementsByTagName("head")[0];
-                x.appendChild(s);
+                s.src = '//api.usersnap.com/load/'+
+                        'e3d3b232-1c21-4961-b73d-fbc8dc7be1c3.js';
+                var x = document.getElementsByTagName('script')[0];
+                x.parentNode.insertBefore(s, x);
             })();
 
             // Create UI elements
