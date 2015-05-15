@@ -51,7 +51,7 @@ define(function(require, exports, module) {
                     }
                 }), c += 100, plugin);
                 menus.addItemByPath("Help/Support/~", new ui.divider(), c += 100, plugin);
-                menus.addItemByPath("Help/Support/Send Support request", new ui.item({
+                menus.addItemByPath("Help/Support/Send Support Request...", new ui.item({
                     onclick: function() {
                         draw();
                         win.show();
@@ -68,7 +68,7 @@ define(function(require, exports, module) {
          * Initializes the menu with Screenshot support (via UserSnap)
          */
         function initMenuWithScreenshotSupport(){
-            menus.addItemByPath("Help/Support/Send Support request with a screenshot", new ui.item({ 
+            menus.addItemByPath("Help/Support/Send Support Request With a Screenshot...", new ui.item({ 
                 onclick: function() {
                     draw();
                     setTimeout(function wait(){
