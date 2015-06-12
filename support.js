@@ -51,10 +51,10 @@ define(function(require, exports, module) {
                     }
                 }), c += 100, plugin);
                 menus.addItemByPath("Help/Support/~", new ui.divider(), c += 100, plugin);
-                menus.addItemByPath("Help/Support/Send Support Request...", new ui.item({
+                menus.addItemByPath("Help/Support/Email support@c9.io For Help...", new ui.item({
                     onclick: function() {
-                        draw();
-                        win.show();
+                        // draw();
+                        window.open('mailto:support@c9.io');
                     }
                 }), c += 100, plugin);
 
