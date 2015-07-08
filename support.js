@@ -40,6 +40,11 @@ define(function(require, exports, module) {
             loaded = true;
 
             menus.once("ready", function(){
+                menus.addItemByPath("Support/Get Help/FAQ", new ui.item({ 
+                    onclick: function(){ 
+                        window.open('https://docs.c9.io/v1.0/docs/faq-general'); 
+                    }
+                }), c += 100, plugin);
                 menus.addItemByPath("Support/Get Help/Support Website", new ui.item({ 
                     onclick: function(){ 
                         window.open('https://support.c9.io/'); 
