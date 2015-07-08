@@ -40,13 +40,13 @@ define(function(require, exports, module) {
             loaded = true;
 
             menus.once("ready", function(){
-                menus.addItemByPath("Support/Get Help/Open Support Website", new ui.item({ 
+                menus.addItemByPath("Support/Get Help/Support Website", new ui.item({ 
                     onclick: function(){ 
                         window.open('https://support.c9.io/'); 
                     }
                 }), c += 100, plugin);
-                menus.addItemByPath("Help/Get Help/~", new ui.divider(), c += 100, plugin);
-                menus.addItemByPath("Help/Get Help/Email support@c9.io For Help...", new ui.item({
+                menus.addItemByPath("Support/Get Help/~", new ui.divider(), c += 100, plugin);
+                menus.addItemByPath("Support/Get Help/Email support@c9.io For Help...", new ui.item({
                     onclick: function() {
                         // draw();
                         window.open('mailto:support@c9.io');
@@ -63,7 +63,7 @@ define(function(require, exports, module) {
          * Initializes the menu with Screenshot support (via UserSnap)
          */
         function initMenuWithScreenshotSupport(){
-            menus.addItemByPath("Help/Get Help/Send Support Request With a Screenshot...", new ui.item({ 
+            menus.addItemByPath("Support/Get Help/Send Support Request With a Screenshot...", new ui.item({ 
                 onclick: function() {
                     draw();
                     setTimeout(function wait(){
