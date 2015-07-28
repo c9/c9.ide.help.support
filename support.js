@@ -51,6 +51,12 @@ define(function(require, exports, module) {
                     }
                 }), c += 100, plugin);
                 menus.addItemByPath("Support/Get Help/~", new ui.divider(), c += 100, plugin);
+                menus.addItemByPath("Support/Get Help/Request a New Feature...", new ui.item({
+                    onclick: function() {
+                        // draw();
+                        window.open('http://feathub.com/c9ide/core');
+                    }
+                }), c += 100, plugin);
                 menus.addItemByPath("Support/Get Help/Email support@c9.io For Help...", new ui.item({
                     onclick: function() {
                         // draw();
