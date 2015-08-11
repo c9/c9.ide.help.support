@@ -2,7 +2,7 @@
 
 define(function(require, exports, module) {
     main.consumes = [
-        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info"
+        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info", "c9.analytics"
     ];
     main.provides = ["help.support"];
     return main;
@@ -14,6 +14,7 @@ define(function(require, exports, module) {
         var menus = imports.menus;
         var auth = imports.auth;
         var info = imports.info;
+        var analytics = imports["c9.analytics"];
         var alert = imports["dialog.alert"].show;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
@@ -60,6 +61,7 @@ define(function(require, exports, module) {
                 menus.addItemByPath("Support/Get Help/Send A Support Request...", new ui.item({
                     onclick: function() {
                         // draw();
+                        analytics.track("Initiated Support Request");
                         try {
                             Intercom('show');
                         }
@@ -82,6 +84,7 @@ define(function(require, exports, module) {
             menus.addItemByPath("Support/Get Help/Send Support Email With a Screenshot...", new ui.item({ 
                 onclick: function() {
                     draw();
+                    analytics.track("Initiated Support Request");
                     setTimeout(function wait(){
                         if (typeof UserSnap !== "undefined") {
                             var email = info.getUser().email;
