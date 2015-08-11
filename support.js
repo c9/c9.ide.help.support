@@ -62,10 +62,10 @@ define(function(require, exports, module) {
                     onclick: function() {
                         // draw();
                         analytics.track("Initiated Support Request");
-                        try {
-                            Intercom('show');
+                        if (window.Intercom) {
+                            window.Intercom('show');
                         }
-                        catch(err) {
+                        else {
                             window.open('mailto:support@c9.io');
                         }
                     }
