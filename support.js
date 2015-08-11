@@ -57,10 +57,15 @@ define(function(require, exports, module) {
                         window.open('http://feathub.com/c9ide/core');
                     }
                 }), c += 100, plugin);
-                menus.addItemByPath("Support/Get Help/Email support@c9.io For Help...", new ui.item({
+                menus.addItemByPath("Support/Get Help/Send A Support Request...", new ui.item({
                     onclick: function() {
                         // draw();
-                        window.open('mailto:support@c9.io');
+                        try {
+                            Intercom('show');
+                        }
+                        catch(err) {
+                            window.open('mailto:support@c9.io');
+                        }
                     }
                 }), c += 100, plugin);
 
@@ -74,7 +79,7 @@ define(function(require, exports, module) {
          * Initializes the menu with Screenshot support (via UserSnap)
          */
         function initMenuWithScreenshotSupport(){
-            menus.addItemByPath("Support/Get Help/Send Support Request With a Screenshot...", new ui.item({ 
+            menus.addItemByPath("Support/Get Help/Send Support Email With a Screenshot...", new ui.item({ 
                 onclick: function() {
                     draw();
                     setTimeout(function wait(){
