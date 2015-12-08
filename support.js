@@ -52,10 +52,10 @@ define(function(require, exports, module) {
                     }
                 }), c += 100, plugin);
                 menus.addItemByPath("Support/Get Help/~", new ui.divider(), c += 100, plugin);
-                menus.addItemByPath("Support/Get Help/Request a New Feature", new ui.item({
+                menus.addItemByPath("Support/Get Help/Make a Feature Request", new ui.item({
                     onclick: function() {
                         // draw();
-                        window.open('http://feathub.com/c9ide/core');
+                        window.open('https://community.c9.io/c/feature-requests');
                     }
                 }), c += 100, plugin);
                 menus.addItemByPath("Support/Get Help/Send A Support Request...", new ui.item({
