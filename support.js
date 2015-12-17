@@ -41,37 +41,22 @@ define(function(require, exports, module) {
             loaded = true;
 
             menus.once("ready", function(){
-                menus.addItemByPath("Support/Get Help/FAQ", new ui.item({ 
-                    onclick: function(){ 
-                        window.open('https://docs.c9.io/v1.0/docs/faq-general'); 
-                    }
-                }), c += 100, plugin);
-                menus.addItemByPath("Support/Get Help/Support Website", new ui.item({ 
-                    onclick: function(){ 
-                        window.open('https://support.c9.io/'); 
-                    }
-                }), c += 100, plugin);
-                menus.addItemByPath("Support/Get Help/~", new ui.divider(), c += 100, plugin);
-                menus.addItemByPath("Support/Get Help/Make a Feature Request", new ui.item({
-                    onclick: function() {
-                        // draw();
-                        window.open('https://community.c9.io/c/feature-requests');
-                    }
-                }), c += 100, plugin);
-                menus.addItemByPath("Support/Get Help/Send A Support Request...", new ui.item({
-                    onclick: function() {
-                        // draw();
-                        analytics.track("Initiated Support Request");
-                        if (window.Intercom) {
-                            window.Intercom('show');
+                if (true) {
+                    menus.addItemByPath("Support/Get Premium Support", new ui.item({
+                        onclick: function() {
+                            // draw();
+                            analytics.track("Initiated Support Request");
+                            if (window.Intercom) {
+                                window.Intercom('show');
+                            }
+                            else {
+                                window.open('mailto:support@c9.io');
+                            }
                         }
-                        else {
-                            window.open('mailto:support@c9.io');
-                        }
-                    }
-                }), c += 100, plugin);
+                    }), c += 100, plugin);
+                }
 
-                if (screenshotSupport)
+                if (screenshotSupport && true)
                     initMenuWithScreenshotSupport();
             });
             
@@ -81,7 +66,7 @@ define(function(require, exports, module) {
          * Initializes the menu with Screenshot support (via UserSnap)
          */
         function initMenuWithScreenshotSupport(){
-            menus.addItemByPath("Support/Get Help/Send Support Email With a Screenshot...", new ui.item({ 
+            menus.addItemByPath("Support/Get Premium Support With a Screenshot", new ui.item({ 
                 onclick: function() {
                     draw();
                     analytics.track("Initiated Support Request");
