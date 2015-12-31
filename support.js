@@ -35,13 +35,13 @@ define(function(require, exports, module) {
         var screenshotSupport = options.screenshotSupport; 
         
         var loaded = false;
-        var c = 0;
+        var c = 300;
         function load() {
             if (loaded) return false;
             loaded = true;
 
             menus.once("ready", function(){
-                if (true) {
+                if (info.getUser().premium) {
                     menus.addItemByPath("Support/Get Premium Support", new ui.item({
                         onclick: function() {
                             // draw();
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
                     }), c += 100, plugin);
                 }
 
-                if (screenshotSupport && true)
+                if (screenshotSupport && info.getUser().premium)
                     initMenuWithScreenshotSupport();
             });
             
