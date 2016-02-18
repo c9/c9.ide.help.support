@@ -2,7 +2,7 @@
 
 define(function(require, exports, module) {
     main.consumes = [
-        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info", "c9.analytics"
+        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info", "c9.analytics", "dialog.upsell"
     ];
     main.provides = ["help.support"];
     return main;
@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         var info = imports.info;
         var analytics = imports["c9.analytics"];
         var alert = imports["dialog.alert"].show;
+        var upsell = imports["dialog.upsell"].show;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
 
@@ -30,9 +31,21 @@ define(function(require, exports, module) {
         var baseurl = options.baseurl;
         var FILEREADER_URL = "/api/provision/filereader-fallback/images";
         var FILETICKET_URL = "/api/context/fileticket";
+        
+        var SUBSCRIPTION_URL = "https://c9.io/account/billing";
 
         var usApiKey = options.userSnapApiKey; 
         var screenshotSupport = options.screenshotSupport; 
+        
+        function ignorePremiumUpsell () {
+            analytics.track("Discarded Support Menu Upsell");
+        }
+        
+        function performUpsell() {
+            analytics.track("Completed Support Menu Upsell");
+            window.open(SUBSCRIPTION_URL, "_blank");
+        }
+        
         
         var loaded = false;
         var c = 300;
@@ -41,22 +54,28 @@ define(function(require, exports, module) {
             loaded = true;
 
             menus.once("ready", function(){
-                if (info.getUser().premium) {
-                    menus.addItemByPath("Support/Get Premium Support", new ui.item({
-                        onclick: function() {
-                            // draw();
-                            analytics.track("Initiated Support Request");
-                            if (window.Intercom) {
-                                window.Intercom('show');
-                            }
-                            else {
-                                window.open('mailto:support@c9.io');
-                            }
+                menus.addItemByPath("Support/Get Premium Support", new ui.item({
+                    onclick: function() {
+                        // draw();
+                        
+                        if (!info.getUser().premium) {
+                            analytics.track("Initiated Support Menu Upsell");
+                            
+                            upsell(performUpsell, ignorePremiumUpsell);
+                            return;
                         }
-                    }), c += 100, plugin);
-                }
+                        
+                        analytics.track("Initiated Support Request");
+                        if (window.Intercom) {
+                            window.Intercom('show');
+                        }
+                        else {
+                            window.open('mailto:support@c9.io');
+                        }
+                    }
+                }), c += 100, plugin);
 
-                if (screenshotSupport && info.getUser().premium)
+                if (screenshotSupport)
                     initMenuWithScreenshotSupport();
             });
             
@@ -69,6 +88,14 @@ define(function(require, exports, module) {
             menus.addItemByPath("Support/Get Premium Support With a Screenshot", new ui.item({ 
                 onclick: function() {
                     draw();
+                    
+                    if (!info.getUser().premium) {
+                        analytics.track("Initiated Support Menu Upsell");
+                        
+                        upsell(performUpsell, ignorePremiumUpsell);
+                        return;
+                    }
+                    
                     analytics.track("Initiated Support Request");
                     setTimeout(function wait(){
                         if (typeof UserSnap !== "undefined") {
