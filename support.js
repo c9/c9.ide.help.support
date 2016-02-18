@@ -35,17 +35,7 @@ define(function(require, exports, module) {
         var SUBSCRIPTION_URL = "https://c9.io/account/billing";
 
         var usApiKey = options.userSnapApiKey; 
-        var screenshotSupport = options.screenshotSupport; 
-        
-        function ignorePremiumUpsell () {
-            analytics.track("Discarded Support Menu Upsell");
-        }
-        
-        function performUpsell() {
-            analytics.track("Completed Support Menu Upsell");
-            window.open(SUBSCRIPTION_URL, "_blank");
-        }
-        
+        var screenshotSupport = options.screenshotSupport;
         
         var loaded = false;
         var c = 300;
@@ -59,8 +49,6 @@ define(function(require, exports, module) {
                         // draw();
                         
                         if (!info.getUser().premium) {
-                            analytics.track("Initiated Support Menu Upsell");
-                            
                             return upgrade.askUpgrade(
                                 "This is a Premium Feature",
                                 'Help is just a click away. Check out our <a href="https://c9.io/pricing" target="_blank">amazing premium plans</a>.',
@@ -69,7 +57,7 @@ define(function(require, exports, module) {
                                         source: "confirmation"
                                     });
                                 },
-                                { source: "ide-support-menu-upgrade-premium-webide" }
+                                { source: "upsell-webide-support" }
                             );
                         }
                         
@@ -98,8 +86,6 @@ define(function(require, exports, module) {
                     draw();
                     
                     if (!info.getUser().premium) {
-                        analytics.track("Initiated Support Menu Upsell");
-                        
                         return upgrade.askUpgrade(
                             "This is a Premium Feature",
                             'Help is just a click away. Check out our <a href="https://c9.io/pricing" target="_blank">amazing premium plans</a>.',
@@ -108,7 +94,7 @@ define(function(require, exports, module) {
                                     source: "confirmation"
                                 });
                             },
-                            { source: "ide-support-menu-upgrade-premium-webide" }
+                            { source: "upsell-webide-support" }
                         );
                     }
                     
