@@ -2,7 +2,7 @@
 
 define(function(require, exports, module) {
     main.consumes = [
-        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info", "c9.analytics", "dialog.upsell"
+        "Plugin", "ui", "menus", "c9", "auth", "dialog.alert", "help", "info", "c9.analytics", "upgrade"
     ];
     main.provides = ["help.support"];
     return main;
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         var info = imports.info;
         var analytics = imports["c9.analytics"];
         var alert = imports["dialog.alert"].show;
-        var upsell = imports["dialog.upsell"].show;
+        var upgrade = imports.upgrade;
         
         var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
 
@@ -61,8 +61,16 @@ define(function(require, exports, module) {
                         if (!info.getUser().premium) {
                             analytics.track("Initiated Support Menu Upsell");
                             
-                            upsell(performUpsell, ignorePremiumUpsell);
-                            return;
+                            return upgrade.askUpgrade(
+                                "This is a Premium Feature",
+                                'Help is just a click away. Check out our <a href="https://c9.io/pricing" target="_blank">amazing premium plans</a>.',
+                                function() {
+                                    emit("confirmAccountRedirect", {
+                                        source: "confirmation"
+                                    });
+                                },
+                                { source: "ide-support-menu-upgrade-premium-webide" }
+                            );
                         }
                         
                         analytics.track("Initiated Support Request");
@@ -92,8 +100,16 @@ define(function(require, exports, module) {
                     if (!info.getUser().premium) {
                         analytics.track("Initiated Support Menu Upsell");
                         
-                        upsell(performUpsell, ignorePremiumUpsell);
-                        return;
+                        return upgrade.askUpgrade(
+                            "This is a Premium Feature",
+                            'Help is just a click away. Check out our <a href="https://c9.io/pricing" target="_blank">amazing premium plans</a>.',
+                            function() {
+                                emit("confirmAccountRedirect", {
+                                    source: "confirmation"
+                                });
+                            },
+                            { source: "ide-support-menu-upgrade-premium-webide" }
+                        );
                     }
                     
                     analytics.track("Initiated Support Request");
