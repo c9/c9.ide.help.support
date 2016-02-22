@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                                         source: "confirmation"
                                     });
                                 },
-                                { source: "upsell-webide-support" }
+                                { source: "upsell-webide-support", isHTML: true }
                             );
                         }
                         
@@ -94,7 +94,7 @@ define(function(require, exports, module) {
                                     source: "confirmation"
                                 });
                             },
-                            { source: "upsell-webide-support" }
+                            { source: "upsell-webide-support", isHTML: true }
                         );
                     }
                     
