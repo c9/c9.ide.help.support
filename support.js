@@ -44,6 +44,8 @@ define(function(require, exports, module) {
             loaded = true;
 
             menus.once("ready", function(){
+                analytics.identify(info.getUser());
+                
                 menus.addItemByPath("Support/Get Premium Support", new ui.item({
                     onclick: function() {
                         // draw();
