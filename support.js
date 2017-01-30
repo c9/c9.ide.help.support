@@ -18,7 +18,7 @@ define(function(require, exports, module) {
         var alert = imports["dialog.alert"].show;
         var upgrade = imports.upgrade;
         
-        var attachmentSizeLimit = 1024*1024*2;  // limit size of attachment to <= 2MB
+        var attachmentSizeLimit = 1024 * 1024 * 2;  // limit size of attachment to <= 2MB
 
         /***** Initialization *****/
         
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
             if (loaded) return false;
             loaded = true;
 
-            menus.once("ready", function(){
+            menus.once("ready", function() {
                 analytics.identify(info.getUser());
                 
                 menus.addItemByPath("Support/Get Premium Support", new ui.item({
@@ -82,7 +82,7 @@ define(function(require, exports, module) {
         /**
          * Initializes the menu with Screenshot support (via UserSnap)
          */
-        function initMenuWithScreenshotSupport(){
+        function initMenuWithScreenshotSupport() {
             menus.addItemByPath("Support/Get Premium Support With a Screenshot", new ui.item({ 
                 onclick: function() {
                     draw();
@@ -101,7 +101,7 @@ define(function(require, exports, module) {
                     }
                     
                     analytics.track("Initiated Support Request");
-                    setTimeout(function wait(){
+                    setTimeout(function wait() {
                         if (typeof UserSnap !== "undefined") {
                             var email = info.getUser().email;
                             UserSnap.setEmailBox(email); 
@@ -149,7 +149,7 @@ define(function(require, exports, module) {
                 var s = document.createElement("script");
                 s.type = "text/javascript";
                 s.async = true;
-                s.src = '//api.usersnap.com/load/'+
+                s.src = '//api.usersnap.com/load/' +
                         'e3d3b232-1c21-4961-b73d-fbc8dc7be1c3.js';
                 var x = document.getElementsByTagName('script')[0];
                 x.parentNode.insertBefore(s, x);
@@ -170,8 +170,8 @@ define(function(require, exports, module) {
             attachment = plugin.getElement("attachment");
             confirmationMessage = plugin.getElement("confirmationMessage");
             
-            btnClose.on("click", function(){ closeWindow(); });
-            btnSend.on("click", function(){ fileTicket(); });
+            btnClose.on("click", function() { closeWindow(); });
+            btnSend.on("click", function() { fileTicket(); });
         
             emit("draw");
         }
@@ -214,10 +214,10 @@ define(function(require, exports, module) {
                         method: "POST",
                         body: fileHandler,
                         headers: {
-                            "Content-Type" : "application/octet-stream",
-                            "UP-FILENAME"  : fileHandler.name,
-                            "UP-SIZE"      : fileHandler.size,
-                            "UP-TYPE"      : fileHandler.type
+                            "Content-Type": "application/octet-stream",
+                            "UP-FILENAME": fileHandler.name,
+                            "UP-SIZE": fileHandler.size,
+                            "UP-TYPE": fileHandler.type
                         }
                     }, function(err, data, res) {
                         if (res.status === 200) {
@@ -241,10 +241,10 @@ define(function(require, exports, module) {
     
             function sendTicketToServer(attachedFile) {
                 var postData = {
-                    "subject"     : subject.getValue(),
-                    "description" : description.getValue(),
-                    "projectName" : c9.projectName,
-                    "userAgent"   : navigator.userAgent
+                    "subject": subject.getValue(),
+                    "description": description.getValue(),
+                    "projectName": c9.projectName,
+                    "userAgent": navigator.userAgent
                 };
                 if (attachedFile) {
                     postData.attachmentName = attachedFile.name;
